@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="2cec4ece-34ed-4bd5-a3fa-44b843b42224" Publisher="CN=camilo" Version="1.0.0.0" />
+  <Identity Name="2cec4ece-34ed-4bd5-a3fa-44b843b42224" Publisher="CN=admin" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="2cec4ece-34ed-4bd5-a3fa-44b843b42224" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>WinBeacons</DisplayName>

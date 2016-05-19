@@ -1,8 +1,8 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using System.Collections.ObjectModel;
-using System.Text;
 using System.Windows.Input;
+using UniversalBeaconLibrary.Beacon;
 using WinBeacons.Services;
 using Windows.Devices.Bluetooth.Advertisement;
 
@@ -15,7 +15,6 @@ namespace WinBeacons.ViewModels
         private readonly INavigationService _navigationService;
         private readonly IStorageService _storageService;
         private readonly IDispatcherService _dispatcherService;
-        private ObservableCollection<string> _testData;
 
         private BeaconWatcherStatus _watcherStatus;
 
@@ -35,23 +34,16 @@ namespace WinBeacons.ViewModels
             RegisterEvents();
 
             CreateCommands();
-
-            TestData = new ObservableCollection<string>();
         }
 
         public ICommand StartCommand { get; private set; }
         public ICommand StopCommand { get; private set; }
+        public ObservableCollection<Beacon> Beacons => this._beaconService.Beacons;
 
         public BeaconWatcherStatus WatcherStatus
         {
             get { return _watcherStatus; }
             set { Set(() => WatcherStatus, ref _watcherStatus, value); }
-        }
-
-        public ObservableCollection<string> TestData
-        {
-            get { return _testData; }
-            set { Set(() => TestData, ref _testData, value); }
         }
 
         private void CreateCommands()
@@ -62,7 +54,7 @@ namespace WinBeacons.ViewModels
 
         private void RegisterEvents()
         {
-            _beaconService.SignalReceived += OnBeaconSignalReceived;
+            //_beaconService.SignalReceived += OnBeaconSignalReceived;
             _beaconService.StatusChanged += OnStatusChanged;
         }
 
@@ -76,20 +68,20 @@ namespace WinBeacons.ViewModels
 
         private async void OnBeaconSignalReceived(object sender, BluetoothLEAdvertisementReceivedEventArgs e)
         {
-            await this._dispatcherService.RunAsync(async () =>
-             {
-                 var sb = new StringBuilder();
+            //  await this._dispatcherService.RunAsync(async () =>
+            //   {
+            //       var sb = new StringBuilder();
 
-                 sb.AppendLine($"Timestamp: {e.Timestamp}");
-                 sb.AppendLine($"BT address: {e.BluetoothAddress}");
-                 sb.AppendLine($"Type: {e.AdvertisementType}");
-                 sb.AppendLine($"Signal Strength: {e.RawSignalStrengthInDBm} DBm");
+            //       sb.AppendLine($"Timestamp: {e.Timestamp}");
+            //       sb.AppendLine($"BT address: {e.BluetoothAddress}");
+            //       sb.AppendLine($"Type: {e.AdvertisementType}");
+            //       sb.AppendLine($"Signal Strength: {e.RawSignalStrengthInDBm} DBm");
 
-                 TestData.Insert(0, sb.ToString());
+            //       TestData.Insert(0, sb.ToString());
 
-                 await _storageService.TryAddItemAsync(e);
-             }
-          );
+            //       await _storageService.TryAddItemAsync(e);
+            //   }
+            //);
         }
 
         private void StartListening()

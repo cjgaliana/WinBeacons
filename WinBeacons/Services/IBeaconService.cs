@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using UniversalBeaconLibrary.Beacon;
 using Windows.Devices.Bluetooth.Advertisement;
 
 namespace WinBeacons.Services
@@ -17,6 +20,8 @@ namespace WinBeacons.Services
     {
         BeaconWatcherStatus Status { get; }
 
+        ObservableCollection<Beacon> Beacons { get; }
+
         event EventHandler<BluetoothLEAdvertisementReceivedEventArgs> SignalReceived;
 
         event EventHandler<BeaconWatcherStatus> StatusChanged;
@@ -28,10 +33,15 @@ namespace WinBeacons.Services
 
     public class BeaconService : IBeaconService
     {
+        private readonly IDispatcherService _dispatcherService;
+        private readonly BeaconManager _beaconManager;
         private readonly BluetoothLEAdvertisementWatcher _watcher;
 
-        public BeaconService()
+        public BeaconService(IDispatcherService dispatcherService)
         {
+            _dispatcherService = dispatcherService;
+            _beaconManager = new BeaconManager();
+            Beacons = _beaconManager.BluetoothBeacons;
             // Create the Bluetooth LE watcher from the Windows 10 UWP
             _watcher = new BluetoothLEAdvertisementWatcher
             {
@@ -42,6 +52,7 @@ namespace WinBeacons.Services
         }
 
         public BeaconWatcherStatus Status => GetStatus();
+        public ObservableCollection<Beacon> Beacons { get; }
 
         public event EventHandler<BluetoothLEAdvertisementReceivedEventArgs> SignalReceived;
 
@@ -99,9 +110,13 @@ namespace WinBeacons.Services
             }
         }
 
-        private void OnWatcherReceived(BluetoothLEAdvertisementWatcher sender,
+        private async void OnWatcherReceived(BluetoothLEAdvertisementWatcher sender,
             BluetoothLEAdvertisementReceivedEventArgs args)
         {
+            // Handle event in the beacon service
+            await ProcessBeacon(args);
+
+            // Propagate event
             var handler = SignalReceived;
             handler?.Invoke(sender, args);
         }
@@ -110,6 +125,14 @@ namespace WinBeacons.Services
         {
             var handler = StatusChanged;
             handler?.Invoke(this, Status);
+        }
+
+        private async Task ProcessBeacon(BluetoothLEAdvertisementReceivedEventArgs args)
+        {
+            await this._dispatcherService.RunAsync(() =>
+            {
+                _beaconManager.ReceivedAdvertisement(args);
+            });
         }
     }
 }

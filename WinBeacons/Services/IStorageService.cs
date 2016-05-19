@@ -1,8 +1,9 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Windows.Devices.Bluetooth.Advertisement;
 using Windows.Storage;
+using Newtonsoft.Json;
+using Nito.AsyncEx;
 
 namespace WinBeacons.Services
 {
@@ -13,16 +14,23 @@ namespace WinBeacons.Services
 
     public class StorageService : IStorageService
     {
+        private readonly AsyncLock _mutex = new AsyncLock();
+
         public async Task TryAddItemAsync(BluetoothLEAdvertisementReceivedEventArgs item)
         {
             try
             {
-                var json = JsonConvert.SerializeObject(item);
-                var file = await GetFileAsync();
-                await FileIO.AppendTextAsync(file, json);
+                using (await _mutex.LockAsync())
+                {
+                    var json = JsonConvert.SerializeObject(item);
+                    var file = await GetFileAsync();
+
+                    await FileIO.AppendTextAsync(file, json);
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                var a = 5;
             }
         }
 

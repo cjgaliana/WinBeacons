@@ -16,12 +16,13 @@
         <StackPanel Orientation="Horizontal">
             <Button Content="Start" Command="{Binding StartCommand}" Margin="5" />
             <Button Content="Stop" Command="{Binding StopCommand}" Margin="5" />
+            <TextBlock Text="{Binding WatcherStatus}" />
         </StackPanel>
 
         <ListView x:Name="listView"
                   Grid.Row="1"
                   Header="Data"
-                  ItemsSource="{Binding TestData}">
+                  ItemsSource="{Binding Beacons}">
 
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -30,10 +31,43 @@
                             BorderBrush="Black"
                             BorderThickness="1"
                             Margin="0 1">
-                            <TextBox
-                                x:Name="textBox"
-                                TextWrapping="Wrap"
-                                Text="{Binding }" />
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock
+                                        TextWrapping="Wrap"
+                                        Text="Addess: " />
+                                <TextBlock
+                                        TextWrapping="Wrap"
+                                        Text="{Binding BluetoothAddressAsString}" />
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock
+                                        TextWrapping="Wrap"
+                                        Text="Timestamp: " />
+                                    <TextBlock
+                                        TextWrapping="Wrap"
+                                        Text="{Binding Timestamp}" />
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                        TextWrapping="Wrap"
+                                        Text="Type: " />
+                                <TextBlock
+                                        TextWrapping="Wrap"
+                                        Text="{Binding BeaconType}" />
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock
+                                        TextWrapping="Wrap"
+                                        Text="Distance: " />
+                                    <TextBlock
+                                        TextWrapping="Wrap"
+                                        Text="{Binding DistanceEstimation}" />
+                                </StackPanel>
+                            </StackPanel>
                         </Border>
                     </Grid>
                 </DataTemplate>
