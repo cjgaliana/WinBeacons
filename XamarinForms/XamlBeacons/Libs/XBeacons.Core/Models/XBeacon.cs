@@ -1,4 +1,6 @@
-﻿namespace XBeacons.Core.Models
+﻿using System;
+
+namespace XBeacons.Core.Models
 {
     public class XBeacon
     {
@@ -9,5 +11,7 @@
         public double EstimatedDistanceInMeters { get; set; }
         public XBeaconProximity Proximity { get; set; }
         public int Rssi { get; set; }
+        public DateTimeOffset Timestamp { get; set; }
+
     }
 }

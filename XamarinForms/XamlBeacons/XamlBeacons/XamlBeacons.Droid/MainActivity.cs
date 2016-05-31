@@ -3,6 +3,8 @@ using Android.Content.PM;
 using Android.OS;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
+using XBeacons.Core.Interfaces;
+using XBeacons.Droid;
 
 namespace XamlBeacons.Droid
 {
@@ -15,6 +17,7 @@ namespace XamlBeacons.Droid
             base.OnCreate(bundle);
 
             Forms.Init(this, bundle);
+            DependencyService.Register<IBeaconWatcher, DroidBeaconWatcher>();
             LoadApplication(new App());
         }
     }

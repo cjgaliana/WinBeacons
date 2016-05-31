@@ -2,6 +2,8 @@
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
+using XBeacons.Core.Interfaces;
+using XBeacons.iOS;
 
 namespace XamlBeacons.iOS
 {
@@ -21,6 +23,7 @@ namespace XamlBeacons.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             Forms.Init();
+            DependencyService.Register<IBeaconWatcher, iOSBeaconWatcher>();
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);

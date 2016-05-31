@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Windows.Devices.Bluetooth.Advertisement;
 using XBeacons.Core.Interfaces;
@@ -129,7 +128,13 @@ namespace XBeacons.UWP
 
         private IList<XBeacon> ExtractBeaconInfo(BluetoothLEAdvertisementReceivedEventArgs args)
         {
-            return new List<XBeacon>();
+            var beacon = new XBeacon();
+
+            beacon.Guid = args.BluetoothAddress.ToString();
+            beacon.Rssi = args.RawSignalStrengthInDBm;
+            beacon.Timestamp = args.Timestamp;
+
+            return new List<XBeacon> {beacon};
         }
     }
 }

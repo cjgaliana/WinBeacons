@@ -2,11 +2,15 @@
 
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:XamlBeacons.ViewModels;assembly=XamlBeacons"
              x:Class="XamlBeacons.App">
 
     <Application.Resources>
         <ResourceDictionary>
 
+          
+          <viewModels:ViewModelLocator x:Key="ViewModelLocator" />
+          
             <!--<Style x:Key="MyButtonStyle" TargetType="Button">
                 <Setter Property="TextColor" Value="Black" />
                 <Setter Property="BackgroundColor" Value="Pink" />
