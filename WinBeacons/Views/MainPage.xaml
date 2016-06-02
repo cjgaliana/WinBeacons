@@ -5,24 +5,123 @@
     xmlns:local="using:WinBeacons.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:extensions="using:WinBeacons.Extensions"
     mc:Ignorable="d"
     DataContext="{Binding MainViewModel, Source={StaticResource ViewModelLocator}}">
+
+    <Page.Resources>
+
+        <SolidColorBrush x:Name="ButtonFillColor" Color="#555555" />
+
+        <Style x:Key="TransparentButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+        <DataTemplate x:Key="HeaderTempalte">
+            <Grid Margin="10,10,10,5">
+                <TextBlock
+                    x:Name="textBlock"
+                    HorizontalAlignment="Left"
+                    TextWrapping="Wrap"
+                    Text="{Binding Mode=OneWay}"
+                    FontWeight="Bold" />
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
-            <Button Content="Start" Command="{Binding StartCommand}" Margin="5" />
-            <Button Content="Stop" Command="{Binding StopCommand}" Margin="5" />
-            <TextBlock Text="{Binding WatcherStatus}" />
+
+        <Grid Margin="10,10,10,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel>
+                <TextBlock
+                    Text="Watcher Status"
+                    TextWrapping="Wrap"
+                    FontWeight="Bold" />
+
+                <TextBlock
+                    Text="{Binding WatcherStatus}"
+                    TextWrapping="Wrap" />
+            </StackPanel>
+            <StackPanel Grid.Column="2"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+
+                <Button
+                    Command="{Binding StartCommand}"
+                    Style="{StaticResource TransparentButton}">
+
+                    <Path
+                        Fill="{StaticResource ButtonFillColor}"
+                        Data="M0,0L9.89063167572021,5.0006103515625 19.7818737030029,9.99874114990234 9.89063167572021,14.9993705749512 0,20 0,9.99874114990234 0,0z" />
+                </Button>
+                <Button
+                    Command="{Binding StopCommand}"
+                    Style="{StaticResource TransparentButton}">
+
+                    <Path
+                        Fill="{StaticResource ButtonFillColor}"
+                        Data="M0,0L20,0 20,20 0,20 0,0z" />
+                </Button>
+            </StackPanel>
+        </Grid>
+        <StackPanel Grid.Row="1">
+            <Grid x:Name="Filters"
+
+                  VerticalAlignment="Center" Margin="10,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="textBlock"
+                           TextWrapping="Wrap"
+                           Text="Beacon Type:"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left" Margin="0,0,5,0" />
+
+                <ComboBox
+                    VerticalAlignment="Stretch"
+                    Margin="0"
+                    Grid.Column="1"
+                    HorizontalAlignment="Stretch"
+                    ItemsSource="{Binding BeaconTypes}"
+                    SelectedItem="{Binding SelectedTypeForFilter, Mode=TwoWay}" />
+
+            </Grid>
+            <TextBlock Margin="10,0,0,0">
+                <Run Text="Total Beacon devices in range: " />
+                <Run Text="{Binding Beacons.Count}" />
+            </TextBlock>
         </StackPanel>
 
-        <ListView x:Name="listView"
-                  Grid.Row="1"
-                  Header="Data"
-                  ItemsSource="{Binding Beacons}">
+
+        <Grid x:Name="EmptyBeacons"
+              Grid.Row="2"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Top"
+              Margin="0,20,0,0"
+              extensions:XamlExtensions.IsCollapsed="{Binding HasBeaconsInRage}">
+            <TextBlock Text="No beacons in range" />
+        </Grid>
+
+        <ListView x:Name="beaconsList"
+                  Grid.Row="2"
+                  Header="Beacons in range"
+                  ItemsSource="{Binding FilteredBeacons}"
+                  SelectionMode="None"
+                  IsItemClickEnabled="True"
+                  HeaderTemplate="{StaticResource HeaderTempalte}"
+                  extensions:XamlExtensions.IsVisible="{Binding HasBeaconsInRage}">
 
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -36,7 +135,7 @@
                                     <TextBlock
                                         TextWrapping="Wrap"
                                         Text="Addess: " />
-                                <TextBlock
+                                    <TextBlock
                                         TextWrapping="Wrap"
                                         Text="{Binding BluetoothAddressAsString}" />
                                 </StackPanel>
@@ -51,10 +150,10 @@
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal">
-                                <TextBlock
+                                    <TextBlock
                                         TextWrapping="Wrap"
                                         Text="Type: " />
-                                <TextBlock
+                                    <TextBlock
                                         TextWrapping="Wrap"
                                         Text="{Binding BeaconType}" />
                                 </StackPanel>
@@ -62,7 +161,7 @@
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock
                                         TextWrapping="Wrap"
-                                        Text="Distance: " />
+                                        Text="Estimated distance: " />
                                     <TextBlock
                                         TextWrapping="Wrap"
                                         Text="{Binding DistanceEstimation}" />
@@ -74,6 +173,7 @@
             </ListView.ItemTemplate>
 
             <ListView.ItemContainerStyle>
+                <!--Expand the item to fill all width-->
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                 </Style>

@@ -96,6 +96,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\XamlExtensions.cs" />
     <Compile Include="Models\Beacon.cs" />
     <Compile Include="Models\BeaconException.cs" />
     <Compile Include="Models\BeaconFrameBase.cs" />
@@ -106,11 +107,15 @@
     <Compile Include="Models\UidEddystoneFrame.cs" />
     <Compile Include="Models\UnknownBeaconFrame.cs" />
     <Compile Include="Models\UrlEddystoneFrame.cs" />
+    <Compile Include="Services\BeaconService.cs" />
+    <Compile Include="Services\BeaconWatcherStatus.cs" />
     <Compile Include="Services\CustomNavigationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\DispatcherService.cs" />
     <Compile Include="Services\IBeaconService.cs" />
     <Compile Include="Services\IDispatcherService.cs" />
     <Compile Include="Services\IStorageService.cs" />
+    <Compile Include="Services\StorageService.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
@@ -144,6 +149,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
